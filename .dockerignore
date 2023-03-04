@@ -1,0 +1,14 @@
+.gitignore
+README.md
+LICENSE
+Makefile
+Dockerfile
+docker-compose.yml
+venv/
+.git
+__pycache__
+app/**/*__pycache__
+app/**/*.pyc
+app/*.sqlite3
+.idea/
+**/.idea/

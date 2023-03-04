@@ -1,0 +1,64 @@
+version: "3.9"
+
+x-base:
+  &base
+  env_file:
+    - ./.env
+  networks:
+    - chat-network
+  restart: always
+
+services:
+  postgres:
+    <<: *base
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    labels:
+      description: "Postgresql Database"
+      service: "Postgresql"
+
+  pgadmin:
+    <<: *base
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "5050:5050"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+      PGADMIN_LISTEN_PORT: ${PG_PORT}
+    volumes:
+      - pg_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  backend:
+    <<: *base
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    volumes:
+      - type: bind
+        source: .
+        target: /src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+networks:
+  chat-network:
+
+volumes:
+  db_data:
+  pg_data:
