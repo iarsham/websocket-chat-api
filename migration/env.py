@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 from app.commons.config import settings
 from app.commons.db import Base
+from app.models.users_model import User
 
 sys.path.append(os.getcwd())
 config = context.config
