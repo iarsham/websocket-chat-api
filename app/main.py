@@ -5,9 +5,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from app.commons.config import settings
 from app.commons.db import async_session, engine, async_engine
+from app.routers.users_router import router as user_router
 
 logger = getLogger(name=__name__)
-app = FastAPI()
+
+app = FastAPI(
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,3 +41,6 @@ async def close_db_engine() -> None:
 @app.get("/", include_in_schema=False)
 async def redirect_to_docs():
     return RedirectResponse(url=app.docs_url)
+
+
+app.include_router(tags=["users"], prefix="/api/v1", router=user_router)

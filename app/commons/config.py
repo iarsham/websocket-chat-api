@@ -1,6 +1,8 @@
-import os
+from pathlib import Path
 from pydantic import BaseSettings, PostgresDsn, Field, validator
 from sqlalchemy.engine.url import URL
+
+BASEDIR = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
@@ -21,7 +23,7 @@ class Settings(BaseSettings):
     CORS_ALLOW_ORIGINS: list[str] = ["*"]
 
     class Config:
-        env_file = f"{os.path.dirname(os.path.abspath(__file__))}/../../.env"
+        env_file = BASEDIR.parent / '.env'
         env_file_encoding = "UTF-8"
 
     @validator("POSTGRES_URL", always=True)

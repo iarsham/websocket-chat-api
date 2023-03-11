@@ -39,3 +39,7 @@ class User(Base, UUIDMixin, CreatedUpdatedAtMixin, BaseUser):
     @property
     def identity(self) -> str:
         return str(self.id)
+
+    @property
+    def is_authenticated(self) -> bool:
+        return True if self.status else False

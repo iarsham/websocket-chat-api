@@ -7,6 +7,9 @@ log-db:
 build:
 	docker-compose up --build -d
 
+down:
+	docker-compose down
+
 check-db:
 	docker-compose exec backend alembic current
 
